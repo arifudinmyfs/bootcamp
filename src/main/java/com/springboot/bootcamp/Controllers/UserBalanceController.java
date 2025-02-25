@@ -42,20 +42,21 @@ public class UserBalanceController {
     }
 
     @GetMapping("/{userId}/total-balance")
-    public ResponseEntity<Map<String, Object>> checkUserAndGetBalance(@PathVariable UUID userId) {
-        MasterUserModel user = masterUserRepository.findById(userId).orElseThrow();
+    public ResponseEntity<?> getUserBalance(@PathVariable UUID userId) {
+        MasterUserModel user = masterUserRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "User tidak ditemukan"));
+
         Double totalBalance = masterAccountService.getTotalBalanceByUserId(userId);
 
         if (totalBalance == null || totalBalance <= 0.0) {
             throw new CustomException(HttpStatus.NOT_FOUND, "Total balance tidak ditemukan");
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("fullName", user.getFullName());
-        response.put("userId", user.getId());
-        response.put("totalBalance", totalBalance);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(Map.of(
+                "fullName", user.getFullName(),
+                "userId", user.getId(),
+                "totalBalance", totalBalance
+        ));
     }
 
     @GetMapping("/{userId}/balance")
