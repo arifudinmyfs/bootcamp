@@ -32,19 +32,13 @@ public class UserBalanceController {
 
     @PostMapping("/account")
     public ResponseEntity<ResponseAcount> addAccount(@Valid @RequestBody CreateAccountRequest request) {
-        MasterUserModel user = masterUserRepository.findById(request.getUserId()).orElseThrow();
-        MasterAccountModel account = new MasterAccountModel();
-        account.setUser(user);
-        account.setBalance(request.getBalance());
-        MasterAccountModel savedAccount = masterAccountRepositories.save(account);
-        ResponseAcount response = new ResponseAcount(savedAccount.getId(), user.getId(), savedAccount.getBalance());
+        ResponseAcount response = masterAccountService.createAccount(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{userId}/total-balance")
     public ResponseEntity<?> getUserBalance(@PathVariable UUID userId) {
-        MasterUserModel user = masterUserRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "User tidak ditemukan"));
+        MasterUserModel user = masterAccountService.getUserById(userId);
 
         Double totalBalance = masterAccountService.getTotalBalanceByUserId(userId);
 
@@ -60,15 +54,22 @@ public class UserBalanceController {
     }
 
     @GetMapping("/{userId}/balance")
-    public ResponseEntity<DataResponse<List<ResponseAcount>>> checkUserAndGetBalances(@PathVariable UUID userId) {
-        MasterUserModel user = masterUserRepository.findById(userId).orElseThrow();
-        List<MasterAccountModel> accounts = masterAccountRepositories.findByUserId(userId);
-        if (accounts.isEmpty()) {
+    public ResponseEntity<DataResponse<List<ResponseAcount>>> getUserBalances(@PathVariable UUID userId) {
+        MasterUserModel user = masterAccountService.getUserById(userId);
+
+        List<ResponseAcount> responseAccounts = masterAccountRepositories.findByUserId(userId)
+                .stream()
+                .map(account -> new ResponseAcount(
+                        account.getId(),
+                        user.getId(),
+                        account.getBalance()))
+                .toList();
+
+        if (responseAccounts.isEmpty()) {
             throw new CustomException(HttpStatus.NOT_FOUND, "Data tidak ditemukan");
         }
-        List<ResponseAcount> responseAccounts = accounts.stream()
-                .map(account -> new ResponseAcount(account.getId(), user.getId(), account.getBalance()))
-                .toList();
+
         return ResponseEntity.ok(new DataResponse<>(responseAccounts));
     }
+
 }

@@ -1,14 +1,15 @@
 package com.springboot.bootcamp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Table(name = "MASTER_ACCOUNT")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MasterAccountModel {
@@ -23,4 +24,9 @@ public class MasterAccountModel {
 
     @Column(name = "BALANCE", nullable = false)
     private Double balance;
+
+    public MasterAccountModel(MasterUserModel user, Double balance) {
+        this.user = user;
+        this.balance = balance;
+    }
 }
