@@ -21,7 +21,11 @@ public class MasterAccountService {
     private final MasterUserRepository masterUserRepository;
 
     @Autowired
-    public MasterAccountService(JdbcTemplate jdbcTemplate, MasterUserRepository masterUserRepository, MasterAccountRepositories masterAccountRepositories) {
+    public MasterAccountService(
+            JdbcTemplate jdbcTemplate,
+            MasterUserRepository masterUserRepository,
+            MasterAccountRepositories masterAccountRepositories
+    ) {
         this.jdbcTemplate = jdbcTemplate;
         this.masterUserRepository = masterUserRepository;
         this.masterAccountRepositories = masterAccountRepositories;
