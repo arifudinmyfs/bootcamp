@@ -1,9 +1,9 @@
-CREATE TABLE BACKOFFICE.MASTER_USER_ARIFUDIN (
+CREATE TABLE MASTER_USER (
                              ID UUID PRIMARY KEY,
                              FULL_NAME VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE BACKOFFICE.MASTER_ACCOUNT_ARIFUDIN (
+CREATE TABLE MASTER_ACCOUNT (
                                 ID UUID PRIMARY KEY,
                                 USER_ID UUID NOT NULL,
                                 BALANCE DOUBLE PRECISION NOT NULL,
