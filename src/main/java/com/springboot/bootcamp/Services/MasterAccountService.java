@@ -32,7 +32,7 @@ public class MasterAccountService {
     }
 
     public Double getTotalBalanceByUserId(UUID userId) {
-        String sql = "SELECT COALESCE(SUM(BALANCE), 0) FROM BACKOFFICE.MASTER_ACCOUNT WHERE USER_ID = ?";
+        String sql = "SELECT COALESCE(SUM(BALANCE), 0) FROM MASTER_ACCOUNT_ARIFUDIN WHERE USER_ID = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{userId}, Double.class);
     }
 

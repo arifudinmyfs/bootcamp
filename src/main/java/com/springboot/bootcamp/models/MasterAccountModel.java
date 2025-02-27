@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "MASTER_ACCOUNT")
+@Table(name = "MASTER_ACCOUNT_ARIFUDIN")
 @Getter
 @Setter
 @NoArgsConstructor
