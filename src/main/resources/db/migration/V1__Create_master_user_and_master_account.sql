@@ -9,3 +9,9 @@ CREATE TABLE MASTER_ACCOUNT_ARIFUDIN (
                                          BALANCE DOUBLE PRECISION NOT NULL,
                                          CONSTRAINT FK_USER_ACCOUNT FOREIGN KEY (USER_ID) REFERENCES MASTER_USER_ARIFUDIN(ID)
 );
+
+CREATE TABLE CRUD_ARIFUDIN (
+                               ID RAW(36) DEFAULT SYS_GUID() PRIMARY KEY,
+                               NAME VARCHAR(255) NOT NULL,
+                               EMAIL VARCHAR(255) NOT NULL UNIQUE
+);
